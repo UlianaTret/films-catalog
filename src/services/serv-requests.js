@@ -1,4 +1,4 @@
-export default class FilmsCatalog {
+export default class servRequests {
   _apiBase = 'https://api.themoviedb.org';
   _optionsGET = {
     method: 'GET',
@@ -13,27 +13,25 @@ export default class FilmsCatalog {
     fetch('https://api.themoviedb.org/3/authentication/guest_session/new', this._optionsGET)
       .then((res) => res.json())
       .then((res) => {
-        console.log(26, res);
         const {
-          expires_at: expires, //60 minutes
+          // expires_at: expires, //60 minutes
           guest_session_id: sessionId,
           success,
         } = res;
         if (success) {
-          //установка куки
-          console.log(expires, sessionId, success);
-          document.cookie = `guest_session_id=${sessionId}; max-age=${expires}; secure; path=/`;
+          // console.log(expires);
+          // document.cookie = `guest_session_id=${sessionId};max-age=${expires};secure;path=/`;
+          document.cookie = `guest_session_id=${sessionId};max-age=${3600};secure;path=/`;
         }
-      })
-      .catch((err) => console.error(err));
+      });
+    // .catch((err) => console.error(err));
   }
 
   async getResource(url) {
     const resource = this._apiBase + url;
 
-    const answerServer = await fetch(resource, this._optionsGET)
-      .then((res) => res.json())
-      .catch((err) => console.error(err));
+    const answerServer = await fetch(resource, this._optionsGET).then((res) => res.json());
+    // .catch((err) => console.error(err));
     return answerServer;
   }
 
@@ -97,7 +95,7 @@ export default class FilmsCatalog {
         .then((res) => res.json())
         .catch((err) => err);
 
-      console.log(116, result);
+      // console.log(116, result);
       if (!result.success) {
         throw new Error('не удалось поставить оценку фильму');
       }
@@ -108,7 +106,7 @@ export default class FilmsCatalog {
 }
 
 function getCookie(name) {
-  let cookie = document.cookie.split('; ').find((row) => row.startsWith(name + '='));
+  let cookie = document.cookie.split(';').find((row) => row.startsWith(name + '='));
   return cookie ? cookie.split('=')[1] : null;
 }
 

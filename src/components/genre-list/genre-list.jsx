@@ -1,21 +1,24 @@
-import React from "react";
-import "./genre-list.css";
+import React from 'react';
+import './genre-list.css';
+
+import { GenreConsumer } from '../../contexts/index';
 
 const GenreList = (props) => {
-    console.log(props)
-    return (
-        <li>
-            {props.genres.map(
-                genre => <ul><span className="genre">{genre}</span></ul>
-            )}
-            <ul><span className="genre">Action</span></ul>
-            <ul><span className="genre">Drama</span></ul>
-            <ul><span className="genre">Comedy</span></ul>
-            <ul><span className="genre">Action</span></ul>
-            <ul><span className="genre">Drama</span></ul>
-            <ul><span className="genre">Comedy</span></ul>
-        </li>
-    )
+  return (
+    <GenreConsumer>
+      {(genres) => {
+        return (
+          <li>
+            {props.genres.map((id) => (
+              <ul key={id}>
+                <span className="genre">{genres[id]}</span>
+              </ul>
+            ))}
+          </li>
+        );
+      }}
+    </GenreConsumer>
+  );
 };
 
 export default GenreList;

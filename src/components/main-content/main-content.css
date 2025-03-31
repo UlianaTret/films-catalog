@@ -1,0 +1,117 @@
+.content {
+  width: 1010px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: #ffffff;
+}
+
+.tab-content {
+  display: flex;
+  width: 1010px;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.search-movie {
+  width: 938px;
+  height: 40px;
+  padding: 9px 12px;
+  border: #d9d9d9 1px solid;
+  border-radius: 4px;
+  margin: 0 auto;
+  font-size: 16px;
+  line-height: 22px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.ant-alert,
+.ant-alert-info {
+  width: 100%;
+  height: 100px;
+  text-align: center;
+}
+
+.catalog {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.ant-spin {
+  margin: 20px auto;
+}
+
+.ant-alert {
+  margin: 20px 0 0 0;
+}
+
+.ant-alert-content {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.ant-alert-message {
+  margin: auto;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+/*пагинация*/
+.ant-pagination {
+  margin: 17px auto;
+}
+
+.ant-pagination .ant-pagination-item-active {
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+.ant-pagination .ant-pagination-item-active a {
+  color: #ffffff;
+}
+
+.ant-pagination .ant-pagination-item-active:hover {
+  background-color: #6495ed;
+  border-color: #6495ed;
+}
+
+.ant-pagination .ant-pagination-item-active a:hover {
+  color: #ffffff;
+}
+
+@media screen and (min-width: 320px) and (max-width: 500px) {
+  .content {
+    width: 388px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: #ffffff;
+  }
+
+  .tab-content {
+    display: flex;
+    width: 388px;
+    flex-direction: column;
+  }
+
+  .search-movie {
+    width: 388px;
+    margin: 0 auto;
+  }
+
+  .catalog {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .ant-pagination {
+    margin: 20px auto;
+  }
+}

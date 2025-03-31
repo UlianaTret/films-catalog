@@ -1,0 +1,40 @@
+.tab {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tab > input[type='radio'] {
+  display: none;
+}
+
+.tab-content {
+  display: none;
+  margin-top: 1rem;
+}
+
+#tab-btn-1:checked ~ #content-1,
+#tab-btn-2:checked ~ #content-2 {
+  display: flex;
+  transition: 0.25s ease-in-out;
+}
+
+.tab > label {
+  display: block;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition:
+    color 0.25s ease-in-out,
+    background-color 0.25s ease-in-out,
+    border-color 0.25s ease-in-out;
+  text-decoration: none;
+  color: #000000a6;
+  border-bottom: #d9d9d9 1px solid;
+}
+
+.tab > input[type='radio']:checked + label {
+  cursor: default;
+  color: #1890ff;
+  border-bottom: #1890ff 2px solid;
+}

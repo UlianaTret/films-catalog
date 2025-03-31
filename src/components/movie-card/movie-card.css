@@ -1,0 +1,164 @@
+.card {
+  width: 451px;
+  height: 279px;
+  display: flex;
+  flex-direction: row;
+  margin: 10px 17px 10px 16px;
+  -webkit-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.15);
+}
+
+.movie-poster {
+  display: flex;
+  width: 183px;
+  height: 279px;
+}
+
+.movie-poster-mini {
+  display: none;
+  width: 60px;
+  height: 91px;
+}
+
+.general-info {
+  display: flex;
+  flex-direction: row;
+}
+
+.general-info div {
+  width: 248px;
+  padding: 10px 9px 6px 20px;
+  justify-content: space-between;
+}
+
+.general-info div div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 0;
+  width: 248px;
+  padding: 0;
+}
+
+.name {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 28px;
+  vertical-align: middle;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #000000;
+}
+
+.rating {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  padding: 2px 5px;
+  margin-right: 9px;
+  font-size: 12px;
+  line-height: 22px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.release-date {
+  margin-bottom: 7px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 22px;
+  letter-spacing: 0;
+  vertical-align: middle;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #827e7e;
+}
+
+.description {
+  width: 228px;
+  height: 129px;
+  padding-left: 20px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 22px;
+  letter-spacing: 0;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.ant-rate {
+  width: 235px;
+  margin-left: 20px;
+  justify-content: center;
+}
+
+.ant-rate-star {
+  width: 16px;
+  height: 15px;
+  margin: auto auto;
+}
+
+.general-info,
+.description,
+.ant-rate {
+  margin-bottom: auto;
+}
+
+@media screen and (min-width: 320px) and (max-width: 500px) {
+  .card {
+    width: 388px;
+    height: 245px;
+    padding: 6px 8px 0 10px;
+    margin: 10px 17px 10px 0;
+  }
+
+  .movie-poster {
+    display: none;
+  }
+
+  .movie-poster-mini {
+    display: flex;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .general-info div {
+    width: 304px;
+    margin: 0 0 0 13px;
+    padding: 0 9px 6px 0;
+    justify-content: space-between;
+  }
+
+  .general-info div div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 304px;
+    padding: 0 8px 0 0;
+  }
+
+  .release-date {
+    margin-bottom: 0;
+  }
+
+  .description {
+    width: 367px;
+    height: 92px;
+    margin-top: 10px;
+    padding: 0;
+  }
+
+  .ant-rate {
+    width: 239px;
+    margin: 13px 7px 13px auto;
+    justify-content: center;
+  }
+}
