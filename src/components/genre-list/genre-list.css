@@ -3,6 +3,8 @@ li {
   flex-direction: row;
   margin-bottom: 7px;
   flex-wrap: wrap;
+  height: 22px;
+  overflow: hidden;
 }
 
 ul {

@@ -1,10 +1,11 @@
 import React from 'react';
+import { Alert } from 'antd';
 
-import './app.css';
-import MainContent from '../main-content';
-// import Footer from '../footer';
 import servRequests from '../../services/serv-requests';
 import { GenreProvider } from '../../contexts/index';
+import MainContent from '../main-content';
+
+import './app.css';
 
 export default class App extends React.Component {
   dataService = new servRequests();
@@ -16,23 +17,25 @@ export default class App extends React.Component {
     movies: null,
     loading: true,
     error: false,
-    globalError: false, //для vpn
+    globalError: false,
     ratedMovies: null,
     loadingRateds: true,
     errorRateds: false,
   };
 
   componentDidMount() {
-    this.getData();
-    this.getRatedMovies();
-    this.getGenresMovies();
-
     //гостевая сессия по api
     this.dataService.createGuestSession();
+    this.getGenresMovies();
+    this.getData();
+    this.getRatedMovies();
   }
 
-  componentDidCatch(error, errorInfo) {
-    console.log(25, error, errorInfo);
+  // componentDidCatch(error, errorInfo) {
+  //   console.log(25, error, errorInfo);
+  //   this.setState({ globalError: true });
+  // }
+  componentDidCatch() {
     this.setState({ globalError: true });
   }
 
@@ -48,7 +51,7 @@ export default class App extends React.Component {
         });
       })
       .catch((reason) => {
-        console.log('произошла ошибка', reason); //, error);
+        console.log('произошла ошибка', reason);
         this.setState(() => {
           return {
             error: true,
@@ -92,7 +95,7 @@ export default class App extends React.Component {
         });
       })
       .catch((reason) => {
-        console.log('произошла ошибка', reason); //, error);
+        console.log('произошла ошибка', reason);
         this.setState(() => {
           return {
             loadingRateds: false,
@@ -102,30 +105,24 @@ export default class App extends React.Component {
       });
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log('fn update APP', prevProps, prevState, snapshot);
+  componentDidUpdate(prevProps, prevState) {
     if (prevState.findMovie !== this.state.findMovie) {
-      console.log('отпрвить запрос на новй каталог');
       this.getData();
     }
 
     if (prevState.page !== this.state.page) {
-      console.log('отпрвить запрос на новй каталог');
       this.getData();
     }
-    // запрашиваю новый каталог
-    // console.log(this.state.movies);
   }
 
   updateCatalog = (movie) => {
-    console.log('запрос нового каталога в App', movie);
     this.setState({
       findMovie: movie,
     });
+    this.updatePage(1);
   };
 
   updatePage = (page) => {
-    console.log('update page app', page);
     this.setState({
       page: page,
     });
@@ -147,8 +144,7 @@ export default class App extends React.Component {
       });
   };
   render() {
-    console.log('render app', this.state);
-    if (this.state.globalError) console.log('вернуть экран ошибки');
+    if (this.state.globalError) return <Alert message={'This service is not available in your country.'} type="info" />;
     return (
       <div className="app">
         <GenreProvider value={this.genres}>

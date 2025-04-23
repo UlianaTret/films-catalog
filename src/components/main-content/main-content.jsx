@@ -23,13 +23,11 @@ export default class MainContent extends React.Component {
   });
 
   onLabelChange = (e) => {
-    console.log('onLableChange', e.target.value);
     this.setState({
       movie: e.target.value,
     });
     this.delayFindMovie();
   };
-  ////////////////////////////////////////////
 
   addUserRate(movie, ratedMovies) {
     if (ratedMovies) {
@@ -41,15 +39,15 @@ export default class MainContent extends React.Component {
   }
 
   render() {
-    const { movies, ratedMovies, findMovie, loading, error } = this.props.data;
+    const { movies, ratedMovies, findMovie, page, loading, error } = this.props.data;
 
     const spinner = loading ? <Spin className="spin-loader" /> : null;
-    const errorMassage = error ? <Alert message="ЧТО-ТО ПОШЛО НЕ ТАК :((" type="error" /> : null; //создадть компонент ошибки
+    const errorMassage = error ? <Alert message="Something went wrong :((" type="error" /> : null;
 
     let content = null;
     if (!(loading || error)) {
       if (movies.length === 0) {
-        const messageUser = `По запросу '${findMovie}' ничего не найдено :((`;
+        const messageUser = `Nothing found for '${findMovie}' :((`;
         content = <Alert message={messageUser} type="info" />;
       } else {
         content = movies.map((movie) => {
@@ -67,7 +65,7 @@ export default class MainContent extends React.Component {
     const ratedMoviesList = ratedMovies ? (
       ratedMovies.map((movie) => <MovieCard movie={movie} key={movie.id} setUserRate={this.props.setUserRate} />)
     ) : (
-      <Alert message="Начните оценивать фильмы" />
+      <Alert message="Start rating movies" />
     );
 
     return (
@@ -92,13 +90,14 @@ export default class MainContent extends React.Component {
               {errorMassage}
               {content}
             </div>
-            <Pagination current={this.props.data.page} onChange={this.props.updatePage} total={50} />
+            {!findMovie || movies.length === 0 || (
+              <Pagination current={page} onChange={this.props.updatePage} total={50} />
+            )}
           </div>
 
           <div className="tab-content" id="content-2">
             <div className="content">
               {spinner}
-              {/*{errorMassage}*/}
               {ratedMoviesList}
             </div>
           </div>

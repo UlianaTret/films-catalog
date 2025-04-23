@@ -10,9 +10,13 @@
 
 .tab-content {
   display: flex;
-  width: 1010px;
+  /*width: 1010px;*/
   flex-direction: column;
   justify-content: center;
+}
+
+div#content-2 .content {
+  width: 938px;
 }
 
 .search-movie {

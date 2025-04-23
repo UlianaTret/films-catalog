@@ -42,6 +42,7 @@
 }
 
 .name {
+  height: 28px;
   font-weight: 400;
   font-size: 20px;
   line-height: 28px;
@@ -50,6 +51,11 @@
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
   color: #000000;
+}
+
+abbr {
+  cursor: help;
+  text-decoration: none;
 }
 
 .rating {

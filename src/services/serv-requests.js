@@ -5,11 +5,16 @@ export default class servRequests {
     headers: {
       accept: 'application/json',
       Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NWIzNzBjOGE3N2U2Mjg2MmVhMTc1YWY4MDUwNWMyMCIsIm5iZiI6MTczMjE4MjgyMC44NDMwMDAyLCJzdWIiOiI2NzNmMDMyNDQ2NTQxYmJjZDM3OWQ1YzgiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.DHJenxs4SsjTaso_kXBQWwnWAfx385RZdJFG4CodLDI',
+        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NDdlNDcxNmM2NzgzNDU2YzhiNWViNDEyMGY3ZDViYyIsIm5iZiI6MTczMjE4MjgyMC44NDMwMDAyLCJzdWIiOiI2NzNmMDMyNDQ2NTQxYmJjZDM3OWQ1YzgiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.LCiYJcrGULvvE0OJbJMn5NfbLSYBXqzujwVec44M1Wo',
     },
   };
 
   async createGuestSession() {
+    // fetch('https://api.themoviedb.org/3/authentication/guest_session/new', this._optionsGET)
+    //     .then(res => res.json())
+    //     .then(res => console.log(res))
+    //     .catch(err => console.error(err));
+    //
     fetch('https://api.themoviedb.org/3/authentication/guest_session/new', this._optionsGET)
       .then((res) => res.json())
       .then((res) => {
@@ -28,6 +33,7 @@ export default class servRequests {
   }
 
   async getResource(url) {
+    console.log('getResource', this._apiBase + url);
     const resource = this._apiBase + url;
 
     const answerServer = await fetch(resource, this._optionsGET).then((res) => res.json());
@@ -62,15 +68,17 @@ export default class servRequests {
     const sessionId = getCookie('guest_session_id');
 
     if (sessionId) {
-      const url = `/3/guest_session/${sessionId}/rated/movies?language=en-US&page=1&sort_by=created_at.asc`;
+      const url = `/3/guest_session/${sessionId}/rated/movies`;
+      // const url = `/3/guest_session/${sessionId}/rated/movies?language=en-US&page=1&sort_by=created_at.asc`;
+      console.log(70, sessionId, url);
       const result = await this.getResource(url);
 
       if (!result.results) {
-        throw new Error(`Запрос не удалось получить список фильмов с оценкой пользователя ${this._apiBase + url}`);
+        throw new Error(`Не удалось получить список фильмов с оценкой пользователя ${this._apiBase + url}`);
       }
       return result.results;
     }
-    return 'вы не авторизованы';
+    return 'Вы не авторизованы';
   }
 
   async setUserRate(id, rate) {
@@ -86,22 +94,20 @@ export default class servRequests {
         value: rate,
       }),
     };
-
     const sessionId = getCookie('guest_session_id');
 
     if (sessionId) {
+      // const url = `/3/movie/${id}/rating`;
       const url = `/3/movie/${id}/rating?guest_session_id=${sessionId}`;
       const result = await fetch(this._apiBase + url, optionsPOST)
         .then((res) => res.json())
         .catch((err) => err);
-
-      // console.log(116, result);
       if (!result.success) {
         throw new Error('не удалось поставить оценку фильму');
       }
       return result.success;
     }
-    return 'вы не авторизированы';
+    return 'Вы не авторизированы';
   }
 }
 

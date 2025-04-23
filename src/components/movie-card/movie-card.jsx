@@ -19,6 +19,16 @@ function cuttingDescription(text) {
   return trimmedString + '...';
 }
 
+function cuttingName(text) {
+  if (text.length <= 18) return text;
+  let trimmedString = text.substring(0, 18);
+  trimmedString = trimmedString.substring(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(' ')));
+  if (trimmedString[trimmedString.length - 1] === ',') {
+    return trimmedString.slice(0, -1) + '...';
+  }
+  return trimmedString + '...';
+}
+
 export default class MovieCard extends React.Component {
   constructor(props) {
     super(props);
@@ -55,7 +65,9 @@ export default class MovieCard extends React.Component {
             <img className="movie-poster-mini" src={apiBase + poster} alt={'Постер фильма ' + name} />
             <div>
               <div>
-                <p className="name">{name}</p>
+                <p className="name">
+                  <abbr title={name}>{cuttingName(name)}</abbr>
+                </p>
                 <p
                   className="rating"
                   aria-label={'рейтинг фильма ' + name}
