@@ -39,7 +39,7 @@ export default class MainContent extends React.Component {
   }
 
   render() {
-    const { movies, ratedMovies, findMovie, page, loading, error } = this.props.data;
+    const { movies, ratedMovies, findMovie, page, totalPages, loading, error } = this.props.data;
 
     const spinner = loading ? <Spin className="spin-loader" /> : null;
     const errorMassage = error ? <Alert message="Something went wrong :((" type="error" /> : null;
@@ -91,7 +91,13 @@ export default class MainContent extends React.Component {
               {content}
             </div>
             {!findMovie || movies.length === 0 || (
-              <Pagination current={page} onChange={this.props.updatePage} total={50} />
+              <Pagination
+                current={page}
+                onChange={this.props.updatePage}
+                total={Math.floor(totalPages / 20) * 20}
+                defaultPageSize={20}
+                showSizeChanger={false}
+              />
             )}
           </div>
 

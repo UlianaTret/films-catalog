@@ -62,11 +62,11 @@ abbr {
   width: 30px;
   height: 30px;
   border-radius: 50%;
+  text-align: center;
   padding: 2px 5px;
   margin-right: 9px;
   font-size: 12px;
   line-height: 22px;
-  text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
 }
@@ -106,6 +106,7 @@ abbr {
 .ant-rate-star {
   width: 16px;
   height: 15px;
+  overflow: visible;
   margin: auto auto;
 }
 

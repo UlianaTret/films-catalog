@@ -1,55 +1,39 @@
 export default class servRequests {
   _apiBase = 'https://api.themoviedb.org';
-  _optionsGET = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NDdlNDcxNmM2NzgzNDU2YzhiNWViNDEyMGY3ZDViYyIsIm5iZiI6MTczMjE4MjgyMC44NDMwMDAyLCJzdWIiOiI2NzNmMDMyNDQ2NTQxYmJjZDM3OWQ1YzgiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.LCiYJcrGULvvE0OJbJMn5NfbLSYBXqzujwVec44M1Wo',
-    },
-  };
-
-  async createGuestSession() {
-    // fetch('https://api.themoviedb.org/3/authentication/guest_session/new', this._optionsGET)
-    //     .then(res => res.json())
-    //     .then(res => console.log(res))
-    //     .catch(err => console.error(err));
-    //
-    fetch('https://api.themoviedb.org/3/authentication/guest_session/new', this._optionsGET)
-      .then((res) => res.json())
-      .then((res) => {
-        const {
-          // expires_at: expires, //60 minutes
-          guest_session_id: sessionId,
-          success,
-        } = res;
-        if (success) {
-          // console.log(expires);
-          // document.cookie = `guest_session_id=${sessionId};max-age=${expires};secure;path=/`;
-          document.cookie = `guest_session_id=${sessionId};max-age=${3600};secure;path=/`;
-        }
-      });
-    // .catch((err) => console.error(err));
-  }
+  _token =
+    'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NDdlNDcxNmM2NzgzNDU2YzhiNWViNDEyMGY3ZDViYyIsIm5iZiI6MTczMjE4MjgyMC44NDMwMDAyLCJzdWIiOiI2NzNmMDMyNDQ2NTQxYmJjZDM3OWQ1YzgiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.LCiYJcrGULvvE0OJbJMn5NfbLSYBXqzujwVec44M1Wo';
 
   async getResource(url) {
     console.log('getResource', this._apiBase + url);
-    const resource = this._apiBase + url;
 
-    const answerServer = await fetch(resource, this._optionsGET).then((res) => res.json());
-    // .catch((err) => console.error(err));
+    const optionsGET = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: this._token,
+      },
+    };
+    const resource = this._apiBase + url;
+    const answerServer = await fetch(resource, optionsGET).then((res) => res.json());
     return answerServer;
   }
 
-  async getAllMovies(movie, page) {
-    const urlFirstPage = '/3/trending/movie/day?language=en-US';
-    const url = movie ? `/3/search/movie?query=${movie}&include_adult=false&language=en-US&page=${page}` : urlFirstPage;
-    const result = await this.getResource(url);
+  async postResource(url, bodyParams) {
+    console.log('postResource', this._apiBase + url);
 
-    if (!result.results) {
-      throw new Error(`Запрос несуществующего ресурса ${this._apiBase + url}`);
-    }
-    return result.results;
+    const optionsPOST = {
+      method: 'POST',
+      headers: {
+        accept: 'application/json',
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: this._token,
+      },
+      body: bodyParams,
+    };
+
+    const resource = this._apiBase + url;
+    const answerServer = await fetch(resource, optionsPOST).then((res) => res.json());
+    return answerServer;
   }
 
   async getGenres() {
@@ -64,44 +48,58 @@ export default class servRequests {
     return objGenres;
   }
 
+  async createGuestSession() {
+    const url = '/3/authentication/guest_session/new';
+    const result = await this.getResource(url);
+    if (result.success) {
+      const { expires_at: expires, guest_session_id: sessionId } = result;
+      document.cookie = `guest_session_id=${sessionId};max-age=${expires};secure;path=/`;
+    } else throw new Error('Перезагрузите страницу');
+  }
+
+  async getAllMovies(movie, page) {
+    const urlFirstPage = '/3/trending/movie/day?language=en-US';
+    const url = movie ? `/3/search/movie?query=${movie}&include_adult=false&language=en-US&page=${page}` : urlFirstPage;
+    const result = await this.getResource(url);
+
+    if (!result.results) {
+      throw new Error(`Запрос несуществующего ресурса ${this._apiBase + url}`);
+    }
+    // return result.results;
+    return result;
+  }
+
   async getRatedMovies() {
+    console.log('getRatedMovies');
     const sessionId = getCookie('guest_session_id');
 
     if (sessionId) {
-      const url = `/3/guest_session/${sessionId}/rated/movies`;
-      // const url = `/3/guest_session/${sessionId}/rated/movies?language=en-US&page=1&sort_by=created_at.asc`;
-      console.log(70, sessionId, url);
-      const result = await this.getResource(url);
+      console.log(76, sessionId);
 
-      if (!result.results) {
+      // const url = `/3/guest_session/${sessionId}/rated/movies?language=en-US&page=1&sort_by=created_at.asc`;
+
+      // const url = `/3/guest_session/${getCookie('guest_session_id')}/rated/movies?language=en-US&page=1&sort_by=created_at.asc`;
+      const url = `/3/guest_session/${getCookie('guest_session_id')}/rated/movies?language=en-US`;
+      const result = await this.getResource(url);
+      console.log(80, result);
+      if (!result.results || !result.success) {
         throw new Error(`Не удалось получить список фильмов с оценкой пользователя ${this._apiBase + url}`);
       }
       return result.results;
-    }
-    return 'Вы не авторизованы';
+    } else throw new Error('Вы не авторизованы');
   }
 
   async setUserRate(id, rate) {
-    const optionsPOST = {
-      method: 'POST',
-      headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json;charset=utf-8',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NWIzNzBjOGE3N2U2Mjg2MmVhMTc1YWY4MDUwNWMyMCIsIm5iZiI6MTczMjE4MjgyMC44NDMwMDAyLCJzdWIiOiI2NzNmMDMyNDQ2NTQxYmJjZDM3OWQ1YzgiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.DHJenxs4SsjTaso_kXBQWwnWAfx385RZdJFG4CodLDI',
-      },
-      body: JSON.stringify({
-        value: rate,
-      }),
-    };
     const sessionId = getCookie('guest_session_id');
 
     if (sessionId) {
-      // const url = `/3/movie/${id}/rating`;
       const url = `/3/movie/${id}/rating?guest_session_id=${sessionId}`;
-      const result = await fetch(this._apiBase + url, optionsPOST)
-        .then((res) => res.json())
-        .catch((err) => err);
+      const bodyParams = JSON.stringify({
+        value: rate,
+      });
+
+      const result = await this.postResource(url, bodyParams);
+      console.log(109, result);
       if (!result.success) {
         throw new Error('не удалось поставить оценку фильму');
       }
@@ -115,5 +113,3 @@ function getCookie(name) {
   let cookie = document.cookie.split(';').find((row) => row.startsWith(name + '='));
   return cookie ? cookie.split('=')[1] : null;
 }
-
-// API Key: 278422daa8469ee049e32446dbb6ca1a

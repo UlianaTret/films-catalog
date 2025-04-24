@@ -11,9 +11,9 @@ export default class App extends React.Component {
   dataService = new servRequests();
   genres = null;
   state = {
-    // findMovie: 'wicked',
     findMovie: null,
     page: 1,
+    totalPages: null,
     movies: null,
     loading: true,
     error: false,
@@ -24,17 +24,12 @@ export default class App extends React.Component {
   };
 
   componentDidMount() {
-    //гостевая сессия по api
     this.dataService.createGuestSession();
     this.getGenresMovies();
     this.getData();
     this.getRatedMovies();
   }
 
-  // componentDidCatch(error, errorInfo) {
-  //   console.log(25, error, errorInfo);
-  //   this.setState({ globalError: true });
-  // }
   componentDidCatch() {
     this.setState({ globalError: true });
   }
@@ -45,13 +40,13 @@ export default class App extends React.Component {
       .getAllMovies(findMovie, page)
       .then((result) => {
         this.setState({
-          movies: Array.from(result),
+          movies: Array.from(result.results),
+          totalPages: result.total_pages,
           loading: false,
           error: false,
         });
       })
-      .catch((reason) => {
-        console.log('произошла ошибка', reason);
+      .catch(() => {
         this.setState(() => {
           return {
             error: true,
@@ -62,7 +57,6 @@ export default class App extends React.Component {
   }
 
   getData() {
-    // if (!this.state.movies) return;
     this.setState(() => {
       return {
         loading: true,
@@ -77,14 +71,12 @@ export default class App extends React.Component {
       .then((result) => {
         this.genres = result;
       })
-      .catch((reason) => {
-        console.log('жанры не найдены', reason);
+      .catch(() => {
         this.genres = null;
       });
   }
 
   getRatedMovies() {
-    // const { findMovie, page } = this.state;
     this.dataService
       .getRatedMovies()
       .then((result) => {
@@ -129,20 +121,21 @@ export default class App extends React.Component {
   };
 
   setUserRate = (id, rate) => {
-    console.log('setUserRate id=', id, 'rate=', rate);
     this.dataService
       .setUserRate(id, rate)
-      .then((result) => {
-        console.log('результат оценки фильма: ', result);
-        if (result) {
-          console.log('app.js setUserRate: вывести Alert, обновить список фильмов с оценкой');
-          this.getRatedMovies();
-        }
+      .then(() => {
+        this.getRatedMovies();
       })
-      .catch((reason) => {
-        console.log('произошла ошибка: ', reason);
+      .catch(() => {
+        this.setState(() => {
+          return {
+            loadingRateds: false,
+            errorRateds: true,
+          };
+        });
       });
   };
+
   render() {
     if (this.state.globalError) return <Alert message={'This service is not available in your country.'} type="info" />;
     return (
