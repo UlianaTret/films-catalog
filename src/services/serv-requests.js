@@ -4,8 +4,6 @@ export default class servRequests {
     'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NDdlNDcxNmM2NzgzNDU2YzhiNWViNDEyMGY3ZDViYyIsIm5iZiI6MTczMjE4MjgyMC44NDMwMDAyLCJzdWIiOiI2NzNmMDMyNDQ2NTQxYmJjZDM3OWQ1YzgiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.LCiYJcrGULvvE0OJbJMn5NfbLSYBXqzujwVec44M1Wo';
 
   async getResource(url) {
-    console.log('getResource', this._apiBase + url);
-
     const optionsGET = {
       method: 'GET',
       headers: {
@@ -19,8 +17,6 @@ export default class servRequests {
   }
 
   async postResource(url, bodyParams) {
-    console.log('postResource', this._apiBase + url);
-
     const optionsPOST = {
       method: 'POST',
       headers: {
@@ -65,23 +61,15 @@ export default class servRequests {
     if (!result.results) {
       throw new Error(`Запрос несуществующего ресурса ${this._apiBase + url}`);
     }
-    // return result.results;
     return result;
   }
 
   async getRatedMovies() {
-    console.log('getRatedMovies');
     const sessionId = getCookie('guest_session_id');
 
     if (sessionId) {
-      console.log(76, sessionId);
-
-      // const url = `/3/guest_session/${sessionId}/rated/movies?language=en-US&page=1&sort_by=created_at.asc`;
-
-      // const url = `/3/guest_session/${getCookie('guest_session_id')}/rated/movies?language=en-US&page=1&sort_by=created_at.asc`;
       const url = `/3/guest_session/${getCookie('guest_session_id')}/rated/movies?language=en-US`;
       const result = await this.getResource(url);
-      console.log(80, result);
       if (!result.results || !result.success) {
         throw new Error(`Не удалось получить список фильмов с оценкой пользователя ${this._apiBase + url}`);
       }
@@ -99,7 +87,6 @@ export default class servRequests {
       });
 
       const result = await this.postResource(url, bodyParams);
-      console.log(109, result);
       if (!result.success) {
         throw new Error('не удалось поставить оценку фильму');
       }

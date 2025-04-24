@@ -62,11 +62,12 @@ export default class MainContent extends React.Component {
       }
     }
 
-    const ratedMoviesList = ratedMovies ? (
-      ratedMovies.map((movie) => <MovieCard movie={movie} key={movie.id} setUserRate={this.props.setUserRate} />)
-    ) : (
-      <Alert message="Start rating movies" />
-    );
+    const ratedMoviesList =
+      ratedMovies.length !== 0 ? (
+        ratedMovies.map((movie) => <MovieCard movie={movie} key={movie.id} setUserRate={this.props.setUserRate} />)
+      ) : (
+        <Alert message="Start rating movies" />
+      );
 
     return (
       <div className="content">

@@ -18,16 +18,15 @@ export default class App extends React.Component {
     loading: true,
     error: false,
     globalError: false,
-    ratedMovies: null,
+    ratedMovies: [],
     loadingRateds: true,
-    errorRateds: false,
+    errorRateds: true,
   };
 
   componentDidMount() {
     this.dataService.createGuestSession();
     this.getGenresMovies();
     this.getData();
-    this.getRatedMovies();
   }
 
   componentDidCatch() {
@@ -76,27 +75,6 @@ export default class App extends React.Component {
       });
   }
 
-  getRatedMovies() {
-    this.dataService
-      .getRatedMovies()
-      .then((result) => {
-        this.setState({
-          ratedMovies: Array.from(result),
-          loadingRateds: false,
-          errorRateds: false,
-        });
-      })
-      .catch((reason) => {
-        console.log('произошла ошибка', reason);
-        this.setState(() => {
-          return {
-            loadingRateds: false,
-            errorRateds: true,
-          };
-        });
-      });
-  }
-
   componentDidUpdate(prevProps, prevState) {
     if (prevState.findMovie !== this.state.findMovie) {
       this.getData();
@@ -120,20 +98,11 @@ export default class App extends React.Component {
     });
   };
 
-  setUserRate = (id, rate) => {
-    this.dataService
-      .setUserRate(id, rate)
-      .then(() => {
-        this.getRatedMovies();
-      })
-      .catch(() => {
-        this.setState(() => {
-          return {
-            loadingRateds: false,
-            errorRateds: true,
-          };
-        });
-      });
+  setUserRate = (movie) => {
+    this.setState({
+      ratedMovies: [...this.state.ratedMovies, movie],
+      errorRateds: false,
+    });
   };
 
   render() {

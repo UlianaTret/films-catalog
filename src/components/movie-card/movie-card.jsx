@@ -47,6 +47,7 @@ export default class MovieCard extends React.Component {
   render() {
     const apiBase = 'https://image.tmdb.org/t/p/original';
     const {
+      id,
       title: name,
       vote_average: vote,
       poster_path: poster,
@@ -87,7 +88,16 @@ export default class MovieCard extends React.Component {
             count={10}
             defaultValue={rating ? rating : 0}
             onChange={(value) => {
-              this.props.setUserRate(this.props.movie.id, value);
+              this.props.setUserRate({
+                id: id,
+                title: name,
+                vote_average: vote,
+                poster_path: poster,
+                release_date: release,
+                genre_ids: genre,
+                overview: description,
+                rating: value,
+              });
             }}
           />
         </div>
